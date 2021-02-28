@@ -620,9 +620,6 @@ class EnsemblePredictions(MultiPartnerLearning):
 
         partner_model_list = [self.dataset.generate_new_model() for _ in range(self.partners_count)]
         self.model = EnsemblePredictionsModel(partner_model_list)
-        # Issue here is that we have 2 models, the Ensemble model and
-        # the model for every partner. self.model could either be the EnsembleModel
-        # or the partner model but in both cases it's not super straightforward.
 
         for partner in self.partners_list:
             partner.model_weights = self.model_weights
