@@ -163,7 +163,9 @@ class MultiPartnerLearning(ABC):
         logger.info(f"{epoch_nb_str} > {mb_nb_str} > {partner_id_str} > val_acc: {val_acc_str}")
 
     def eval_and_log_model_val_perf(self):
+
         model = self.build_model()
+
         if self.val_set == 'global':
             hist = model.evaluate(self.val_data[0],
                                   self.val_data[1],
@@ -626,6 +628,10 @@ class EnsemblePredictions(MultiPartnerLearning):
             partner.model_weights = self.model_weights
         # the partners should all start with a different set of weights
         logger.info("Init EnsemblePredictionsModel model")
+
+    def build_model(self):
+        partner_model_list = [partner.build_model() for partner in self.partners_list]
+        return EnsemblePredictionsModel(partner_model_list)
 
     def fit_epoch(self):
         # Clear Keras' old models
